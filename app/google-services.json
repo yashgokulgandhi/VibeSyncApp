@@ -12,7 +12,20 @@
           "package_name": "com.example.vibesyncapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "820667898177-l96bj0helf5horendr43fnuf86r86s5v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.vibesyncapp",
+            "certificate_hash": "0998f48a6129df9123718090b2d0878cfb8645eb"
+          }
+        },
+        {
+          "client_id": "820667898177-nrfh6kv1r5ott7k76gd3sdev90iir50r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDqsqZyYwm16UouilUDX7x86axZAxZrukk"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "820667898177-nrfh6kv1r5ott7k76gd3sdev90iir50r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

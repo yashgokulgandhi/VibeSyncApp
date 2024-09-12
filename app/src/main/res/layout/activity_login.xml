@@ -75,6 +75,16 @@
        android:textStyle="bold"
        />
 
+    <Button
+        android:id="@+id/loginwithgoogle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login with Google"
+        android:background="@color/black"
+        android:textStyle="bold"
+        />
+
+
 
 
 
