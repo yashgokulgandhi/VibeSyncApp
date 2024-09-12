@@ -7,7 +7,7 @@
     android:gravity="center">
 
     <TextView
-        android:id="@+id/logintextview"
+        android:id="@+id/textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/register"
@@ -35,7 +35,15 @@
         android:inputType="textPassword"
         />
 
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
+
     <Button
+        android:id="@+id/registerbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/registerbtn"
@@ -44,12 +52,14 @@
         />
 
     <TextView
+        android:id="@+id/clicklogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/click_to_login"
         android:layout_margin="20dp"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:textColor="#1081DA"
+        android:textStyle="bold"
         />
 
 

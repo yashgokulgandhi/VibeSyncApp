@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "820667898177",
+    "project_id": "vibesyncapplication",
+    "storage_bucket": "vibesyncapplication.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:820667898177:android:1c026c5be9abe72f6c29c0",
+        "android_client_info": {
+          "package_name": "com.example.vibesyncapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqsqZyYwm16UouilUDX7x86axZAxZrukk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

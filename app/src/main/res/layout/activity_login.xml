@@ -23,7 +23,10 @@
         android:layout_marginTop="20dp"
         android:hint="@string/enter_email"
         android:inputType="textEmailAddress"
+
         />
+
+
     <EditText
         android:id="@+id/password"
         android:layout_width="match_parent"
@@ -33,23 +36,43 @@
         android:layout_marginTop="10dp"
         android:hint="@string/enter_password"
         android:inputType="textPassword"
+        android:textStyle="bold"
          />
 
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
+
     <Button
+        android:id="@+id/loginbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/loginbtn"
         android:layout_marginTop="30dp"
 
         />
+    <TextView
+        android:id="@+id/recoverpassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Forget Password? Recover"
+        android:textStyle="bold"
+        android:textSize="16sp"
+
+        />
 
    <TextView
+       android:id="@+id/clickRegister"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:text="@string/click_to_register"
        android:layout_margin="20dp"
-       android:textSize="18sp"
+       android:textSize="20sp"
        android:textColor="#1081DA"
+       android:textStyle="bold"
        />
 
 
