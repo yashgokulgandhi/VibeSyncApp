@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                         fr2.commit();
                         return true;
                     case 3:
-                        actionBar.setTitle("Home");
+                        actionBar.setTitle("Users");
                         UsersFragment fragment3=new UsersFragment();
                         FragmentTransaction fr3=getSupportFragmentManager().beginTransaction();
                         fr3.replace(R.id.content,fragment3,"");

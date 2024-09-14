@@ -119,21 +119,24 @@ public class LoginActivity extends AppCompatActivity {
                     .addOnCompleteListener(task -> {
                         progressBar.setVisibility(View.GONE);
                         if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            String emailId = user.getEmail();
-                            String uid = user.getUid();
+                           if(task.getResult().getAdditionalUserInfo().isNewUser())
+                           {
+                               FirebaseUser user = mAuth.getCurrentUser();
+                               String emailId = user.getEmail();
+                               String uid = user.getUid();
 
-                            HashMap<Object, String> hashMap = new HashMap<>();
-                            hashMap.put("email", emailId);
-                            hashMap.put("uid", uid);
-                            hashMap.put("name", "");
-                            hashMap.put("phone", "");
-                            hashMap.put("image", "");
+                               HashMap<Object, String> hashMap = new HashMap<>();
+                               hashMap.put("email", emailId);
+                               hashMap.put("uid", uid);
+                               hashMap.put("name", "");
+                               hashMap.put("phone", "");
+                               hashMap.put("image", "");
 
-                            // Storing user info in Firebase Database
-                            FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            DatabaseReference reference = database.getReference("Users");
-                            reference.child(uid).setValue(hashMap);
+                               // Storing user info in Firebase Database
+                               FirebaseDatabase database = FirebaseDatabase.getInstance();
+                               DatabaseReference reference = database.getReference("Users");
+                               reference.child(uid).setValue(hashMap);
+                           }
 
 
                             Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
@@ -213,6 +216,7 @@ public class LoginActivity extends AppCompatActivity {
                                             hashMap.put("name", "");
                                             hashMap.put("phone", "");
                                             hashMap.put("image", "");
+                                            hashMap.put("cover", "");
 
                                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                                             DatabaseReference reference = database.getReference("Users");

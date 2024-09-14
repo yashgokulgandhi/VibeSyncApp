@@ -1,16 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileFragment">
+    tools:context=".ProfileFragment"
+    android:background="#F1EDED">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Profile"
-        android:gravity="center"
-        android:textSize="30sp"/>
 
-</FrameLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <ImageView
+                android:id="@+id/coveriv"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:scaleType="fitXY"
+                android:background="@color/design_default_color_primary_dark">
+
+            </ImageView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="100dp">
+                <ImageView
+                    android:id="@+id/avatarIV"
+                    android:layout_marginStart="20dp"
+                    android:background="@color/design_default_color_primary"
+                    android:padding="5dp"
+                    android:src="@drawable/profile3"
+                    android:layout_width="120dp"
+                    android:scaleType="fitXY"
+                    android:layout_height="120dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#77000000">
+                    <TextView
+                        android:id="@+id/nametv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text=""
+                        android:layout_marginTop="6dp"
+                        android:textColor="@color/white"
+                        />
+                    <TextView
+                        android:id="@+id/emailtv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="6dp"
+                        android:textColor="@color/white"
+                        />
+                    <TextView
+                        android:id="@+id/phonetv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="6dp"
+                        android:textColor="@color/white"
+                        />
+                </LinearLayout>
+
+            </LinearLayout>
+        </RelativeLayout>
+
+    </ScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="10dp"
+        android:src="@drawable/edit_svgrepo_com"
+        android:backgroundTint="@color/design_default_color_primary"/>
+
+
+</RelativeLayout>
