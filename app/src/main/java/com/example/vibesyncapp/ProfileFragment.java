@@ -10,6 +10,10 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.Manifest;
@@ -26,6 +30,9 @@ import android.provider.MediaStore;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -51,8 +58,14 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.Key;
-import java.util.HashMap;
+import java.util.HashMap;import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.widget.ImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -412,53 +425,122 @@ public class ProfileFragment extends Fragment {
     }
 
     private void uploadProfileCoverphoto(Uri uri) {
-
         pd.show();
-        String filepathandName=storagepath+""+profileOrCoverPhoto+" "+user.getUid();
-        StorageReference storageReference2=storageReference.child(filepathandName);
-        storageReference2.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                Task<Uri> uriTask=taskSnapshot.getStorage().getDownloadUrl();
+        // Process the image to fix orientation
+        try {
+            InputStream inputStream = getActivity().getContentResolver().openInputStream(uri);
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 
-                while (!uriTask.isSuccessful());
-                Uri downloaduri=uriTask.getResult();
+            ExifInterface exif = new ExifInterface(getActivity().getContentResolver().openInputStream(uri));
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
 
-                if (uriTask.isSuccessful())
-                {
-                    HashMap<String,Object> results=new HashMap<>();
-                    results.put(profileOrCoverPhoto,downloaduri.toString());
+            Matrix matrix = new Matrix();
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    matrix.postRotate(90);
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    matrix.postRotate(180);
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    matrix.postRotate(270);
+                    break;
+            }
 
-                    dbref.child(user.getUid()).updateChildren(results).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            pd.dismiss();
-                            Toast.makeText(getActivity(),"Image Updated...",Toast.LENGTH_LONG).show();
+            Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            pd.dismiss();
-                            Toast.makeText(getActivity(),"Error updating image.",Toast.LENGTH_LONG).show();
-                        }
-                    });
+            // Save the processed bitmap to a file
+            File file = new File(getActivity().getCacheDir(), "temp_image.jpg");
+            FileOutputStream out = new FileOutputStream(file);
+            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+
+            Uri processedUri = Uri.fromFile(file);
+
+            // Proceed with uploading the processed image
+            String filepathandName = storagepath + "" + profileOrCoverPhoto + " " + user.getUid();
+            StorageReference storageReference2 = storageReference.child(filepathandName);
+            storageReference2.putFile(processedUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                    while (!uriTask.isSuccessful()) ;
+
+                    Uri downloaduri = uriTask.getResult();
+
+                    if (uriTask.isSuccessful()) {
+                        HashMap<String, Object> results = new HashMap<>();
+                        results.put(profileOrCoverPhoto, downloaduri.toString());
+
+                        dbref.child(user.getUid()).updateChildren(results).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                pd.dismiss();
+                                Toast.makeText(getActivity(), "Image Updated...", Toast.LENGTH_LONG).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                pd.dismiss();
+                                Toast.makeText(getActivity(), "Error updating image.", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    } else {
+                        pd.dismiss();
+                        Toast.makeText(getActivity(), "Some error occurred", Toast.LENGTH_LONG).show();
+                    }
                 }
-                else {
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
                     pd.dismiss();
-                    Toast.makeText(getActivity(),"Some error occured",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
                 }
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
             pd.dismiss();
-            Toast.makeText(getActivity(),e.getMessage(),Toast.LENGTH_LONG).show();
-
-            }
-        });
-
+            Toast.makeText(getActivity(), "Error processing image.", Toast.LENGTH_LONG).show();
+        }
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        setHasOptionsMenu(true);
+        inflater.inflate(R.menu.main, menu);
+        super.onCreateOptionsMenu(menu,inflater);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected( @NonNull MenuItem item ) {
+        int i=0;
+        if(item.getItemId()==R.id.logoutbtn)
+            i=1;
+        switch (i){
+            case 1:
+                firebaseAuth.signOut();
+
+                if(user==null)
+                {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear activity stack
+                    startActivity(intent);
+                } // Close MainActivity
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
 }

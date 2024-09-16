@@ -198,40 +198,44 @@ public class LoginActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                if (account != null) {
-                    String idToken = account.getIdToken();
-                    if (idToken != null) {
-                        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-                        mAuth.signInWithCredential(credential)
-                                .addOnCompleteListener(this, task1 -> {
-                                    if (task1.isSuccessful()) {
-                                        FirebaseUser user = mAuth.getCurrentUser();
-                                        if (user != null) {
-                                            String emailId = user.getEmail();
-                                            String uid = user.getUid();
+                AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
 
-                                            HashMap<String, String> hashMap = new HashMap<>();
-                                            hashMap.put("email", emailId);
-                                            hashMap.put("uid", uid);
-                                            hashMap.put("name", "");
-                                            hashMap.put("phone", "");
-                                            hashMap.put("image", "");
-                                            hashMap.put("cover", "");
+                mAuth.signInWithCredential(credential).addOnCompleteListener(this, signInTask -> {
+                    if (signInTask.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (user != null && signInTask.getResult().getAdditionalUserInfo().isNewUser()) {
+                            String emailId = user.getEmail();
+                            String uid = user.getUid();
 
-                                            FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                            DatabaseReference reference = database.getReference("Users");
-                                            reference.child(uid).setValue(hashMap);
+                            HashMap<String, String> hashMap = new HashMap<>();
+                            hashMap.put("email", emailId);
+                            hashMap.put("uid", uid);
+                            hashMap.put("name", "");
+                            hashMap.put("phone", "");
+                            hashMap.put("image", "");
 
-                                            Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                            finish();
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            DatabaseReference reference = database.getReference("Users");
+                            reference.child(uid).setValue(hashMap)
+                                    .addOnCompleteListener(saveTask -> {
+                                        if (saveTask.isSuccessful()) {
+                                            Toast.makeText(LoginActivity.this, "User data saved successfully", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(LoginActivity.this, "Failed to save user data", Toast.LENGTH_SHORT).show();
                                         }
-                                    } else {
+                                    });
+                        }
+
+                        Toast.makeText(LoginActivity.this, "Google Sign-In Successful", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+     } else {
                                         Toast.makeText(LoginActivity.this, "Google sign-in failed", Toast.LENGTH_SHORT).show();
                                     }
                                 });
-                    }
-                }
+
+
             } catch (ApiException e) {
                 Toast.makeText(this, "Sign in failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
