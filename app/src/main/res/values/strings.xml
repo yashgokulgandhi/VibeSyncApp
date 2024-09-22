@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">VibeSyncApp</string>
+    <string name="app_name">VibeSync</string>
     <string name="login">Login</string>
     <string name="enter_email">Enter Email</string>
     <string name="enter_password">Enter Password</string>

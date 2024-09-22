@@ -1,4 +1,4 @@
-package com.example.vibesyncapp;
+package com.example.vibesyncapp.Models;
 
 public class ModelUser {
 

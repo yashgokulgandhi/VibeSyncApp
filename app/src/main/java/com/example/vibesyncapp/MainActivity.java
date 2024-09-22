@@ -67,7 +67,11 @@ public class MainActivity extends AppCompatActivity {
                 }else if (item.getItemId()==R.id.nav_users) {
                     i=3;
 
+                }else if (item.getItemId()==R.id.nav_chats) {
+                    i=4;
+
                 }
+
 
                 switch (i)
                 {
@@ -91,6 +95,13 @@ public class MainActivity extends AppCompatActivity {
                         FragmentTransaction fr3=getSupportFragmentManager().beginTransaction();
                         fr3.replace(R.id.content,fragment3,"");
                         fr3.commit();
+                        return true;
+                    case 4:
+                        actionBar.setTitle("Chats");
+                        ChatListFragment fragment4=new ChatListFragment();
+                        FragmentTransaction fr4=getSupportFragmentManager().beginTransaction();
+                        fr4.replace(R.id.content,fragment4,"");
+                        fr4.commit();
                         return true;
 
                 }

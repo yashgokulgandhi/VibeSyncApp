@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
 
         actionBar=getSupportActionBar();
         actionBar.setIcon(R.mipmap.ic_launcher_foreground);
-        actionBar.setTitle("VibeSync App");
+        actionBar.setTitle("VibeSync");
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
 
@@ -144,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         } else {
-                            Toast.makeText(LoginActivity.this, "Authentication failed If you have not Registered then Register first", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Authentication failed If you have not Registered then Register first", Toast.LENGTH_LONG).show();
                         }
                     });
         });

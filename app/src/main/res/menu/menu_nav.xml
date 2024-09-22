@@ -10,4 +10,8 @@
     <item android:title="Users"
         android:id="@+id/nav_users"
         android:icon="@drawable/profile2"/>
+    <item android:title="Chats"
+        android:id="@+id/nav_chats"
+        android:icon="@drawable/message_square_lines_svgrepo_com"/>
+
 </menu>

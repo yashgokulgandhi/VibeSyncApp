@@ -1,6 +1,7 @@
-package com.example.vibesyncapp;
+package com.example.vibesyncapp.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.vibesyncapp.ChatActivity;
+import com.example.vibesyncapp.Models.ModelUser;
+import com.example.vibesyncapp.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -37,6 +41,7 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
 
+        String hiduid=userList.get(position).getUid();
         String userimage=userList.get(position).getImage();
         String username=userList.get(position).getName();
         String useremail=userList.get(position).getEmail();
@@ -46,14 +51,16 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
 
         try {
             Picasso.get().load(userimage).placeholder(R.drawable.user_circle_svgrepo_com).into(holder.mavatartv);
-        }catch (Exception e){
+        }catch (Exception ignored){
 
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,""+useremail,Toast.LENGTH_SHORT ).show();
+                Intent intent=new Intent(context.getApplicationContext(), ChatActivity.class);
+                intent.putExtra("hisUid",hiduid);
+                context.startActivity(intent);
             }
         });
 
@@ -64,7 +71,7 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
         return userList.size();
     }
 
-    class MyHolder extends RecyclerView.ViewHolder{
+    static class MyHolder extends RecyclerView.ViewHolder{
 
         ImageView mavatartv;
         TextView mnametv,memailtv;
